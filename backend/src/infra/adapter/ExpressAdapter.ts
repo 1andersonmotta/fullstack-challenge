@@ -22,9 +22,9 @@ export default class ExpressAdapter implements Http {
     });
   }
 
-  on(method: string, url: string, callback: (req: Request, res: Response) => void): void {
+  on(method: string, url: string, middleware: Function, callback: (req: Request, res: Response) => void): void {
     Logger.info(`[ ${method.toUpperCase()} ] - ${url}`);
-    this.app[method as keyof Express](url, callback);
+    this.app[method as keyof Express](url, middleware, callback);
   }
 
   listen(port: number): void {

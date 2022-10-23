@@ -3,3 +3,4 @@ docker
 logs
 dist
 yarn.lock
+coverage

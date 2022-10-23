@@ -7,7 +7,8 @@
 		"start": "node dist/src/server.js",
 		"dev": "ts-node-dev --respawn --inspect --transpile-only --exit-child src/server.ts",
 		"test": "jest",
-		"test:watch": "jest --watch"
+		"test:watch": "jest --watch",
+		"test:cov": "jest --coverage"
 	},
 	"keywords": [],
 	"author": "",

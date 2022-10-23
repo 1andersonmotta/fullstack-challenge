@@ -1,46 +1,30 @@
-import axios, { AxiosRequestHeaders, AxiosResponse } from 'axios';
+import axios from 'axios';
+import { AxiosAdapterProps, ClientHttp, ClientHttpResponse, IMethod } from '../../interfaces/ClientHttp';
 
-import config from '../config/configuration';
-
-interface AxiosAdapterProps {
-	url: string;
-	domain: 'crawler';
-	headers?: AxiosRequestHeaders;
-	method?: 'get' | 'post' | 'put' | 'delete';
-	data?: any;
-}
-
-export class AxiosAdapter {
-	static async get<T>(config: AxiosAdapterProps): Promise<AxiosResponse<T, any>> {
-		config.headers = {
-			'Content-Type': 'application/json',
-		};
-		const httpConfig = { method: 'get', ...config } as AxiosAdapterProps;
-		return await this.fetchResponse(httpConfig);
+export class AxiosAdapter implements ClientHttp {
+	async get<T>(config: AxiosAdapterProps<T>): Promise<ClientHttpResponse<T>> {
+		const httpConfig = { method: 'get' as IMethod, ...config };
+		return await this.fetchResponse<T>(httpConfig);
 	}
 
-	static async post<T>(config: AxiosAdapterProps): Promise<AxiosResponse<T, any>> {
-		const httpConfig = { method: 'post', ...config } as AxiosAdapterProps;
-		return await this.fetchResponse(httpConfig);
+	async post<T>(config: AxiosAdapterProps<T>): Promise<ClientHttpResponse<T>> {
+		const httpConfig = { method: 'post' as IMethod, ...config };
+		return await this.fetchResponse<T>(httpConfig);
 	}
 
-	static async put<T>(config: AxiosAdapterProps): Promise<AxiosResponse<T, any>> {
-		const httpConfig = { method: 'put', ...config } as AxiosAdapterProps;
-		return await this.fetchResponse(httpConfig);
+	async put<T>(config: AxiosAdapterProps<T>): Promise<ClientHttpResponse<T>> {
+		const httpConfig = { method: 'put' as IMethod, ...config };
+		return await this.fetchResponse<T>(httpConfig);
 	}
 
-	static async delete<T>(config: AxiosAdapterProps): Promise<AxiosResponse<T, any>> {
-		const httpConfig = { method: 'delete', ...config } as AxiosAdapterProps;
-		return await this.fetchResponse(httpConfig);
+	async delete<T>(config: AxiosAdapterProps<T>): Promise<ClientHttpResponse<T>> {
+		const httpConfig = { method: 'delete' as IMethod, ...config };
+		return await this.fetchResponse<T>(httpConfig);
 	}
 
-	private static async fetchResponse(httpConfig: AxiosAdapterProps): Promise<AxiosResponse<any, any>> {
-		httpConfig.headers = {
-			'Content-Type': 'application/json',
-			...httpConfig.headers,
-		};
+	private async fetchResponse<T>(httpConfig: AxiosAdapterProps): Promise<ClientHttpResponse<T>> {
 		try {
-			const response = await axios(`${config.domain[httpConfig.domain]}/${httpConfig.url}`, {
+			const response = await axios<T>(`${httpConfig.url}`, {
 				method: httpConfig.method,
 				headers: httpConfig.headers,
 				data: httpConfig.data,

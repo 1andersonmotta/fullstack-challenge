@@ -62,13 +62,4 @@ describe("Client", () => {
         await clientService.deleteAll();
         expect(await clientService.findAll()).toHaveLength(0);
     })
-
-    test.skip("Deve  buscar a geolocalização de um cliente", async () => {
-        const location = await GeoLocation.getGeoLocation(addressMock);
-        if (location) {
-            addressMock.setLatitudeAndLongitude(location);
-            expect(addressMock.location).toHaveProperty("latitude");
-            expect(addressMock.location).toHaveProperty("longitude");
-        }
-    })
 })

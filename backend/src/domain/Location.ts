@@ -1,7 +1,7 @@
 
 export class Location {
-    latitude: number;
-    longitude: number;
+    latitude: string;
+    longitude: string;
     constructor(inputLocation: InputLocation) {
         this.latitude = inputLocation.latitude;
         this.longitude = inputLocation.longitude;
@@ -9,6 +9,6 @@ export class Location {
 }
 
 export type InputLocation = {
-    latitude: number;
-    longitude: number;
+    latitude: string;
+    longitude: string;
 }

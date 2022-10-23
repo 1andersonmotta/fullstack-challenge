@@ -60,8 +60,12 @@ describe("Client", () => {
         const clientService = new OrderService(new ClientMemoryRepository(), new AddressMemoryRepository());
         const clientEntity = await clientService.save(orderMock);
         await clientService.delete(clientEntity.id);
-        const client = await clientService.findById(clientEntity.id);
-        expect(client).toBeUndefined();
+        try {
+            await clientService.findById(clientEntity.id)
+        } catch (error: any) {
+            expect(error.message).toBe("Cliente não encontrado");
+        }
+
     })
 
     test("Deve deletar todos os clientes", async () => {

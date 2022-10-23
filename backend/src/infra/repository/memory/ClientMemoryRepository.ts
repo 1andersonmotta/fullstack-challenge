@@ -1,7 +1,7 @@
-import { Address } from "../../../domain/Address";
 import { ClientOrder } from "../../../domain/ClientOrder";
 import { ClientRepository } from "../../../interfaces/ClientRepository";
 import { TablePaginateResponse } from "../../../interfaces/TablePaginateResponse";
+import { NotFound } from "../../helpers/ErrorHandlers";
 
 export class ClientMemoryRepository implements ClientRepository {
     private clients: ClientOrder[] = [];
@@ -34,8 +34,11 @@ export class ClientMemoryRepository implements ClientRepository {
         });
     }
 
-    async findById(id: string): Promise<ClientOrder | undefined> {
+    async findById(id: string): Promise<ClientOrder> {
         const clientEntity = this.clients.find(client => client.id === id);
+        if (!clientEntity) {
+            throw NotFound("Cliente não encontrado");
+        }
         return Promise.resolve(clientEntity);
     }
 

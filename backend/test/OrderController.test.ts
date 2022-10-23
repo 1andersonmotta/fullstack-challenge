@@ -1,3 +1,4 @@
+import { OrderSaveDto } from './../src/dto/OrderCreateDto';
 import { OrderCreateDto } from "../src/dto/OrderCreateDto";
 import { AxiosAdapter } from "../src/infra/adapter/AxiosAdapter";
 
@@ -20,8 +21,8 @@ const bodyMock: OrderCreateDto = {
         country: "Alemanha",
         neighborhood: "Mitte",
         number: 1,
-        state: "SP",
-        zipCode: "18044-050",
+        state: "",
+        zipCode: "1111",
     }
 }
 
@@ -50,22 +51,36 @@ describe("OrderController", () => {
             url: "http://localhost:3000/api/orders/orders?page=1&per_page=10",
         });
         expect(response.status).toBe(200);
-        expect(response.data).toEqual({
-            data: [],
-            page: "1",
-            per_page: "10",
-            total: 0,
-            total_pages: 0
-        });
+
     })
 
     test("Deve cadastrar um pedido /orders", async () => {
         const axiosAdapter = new AxiosAdapter();
-        const response = await axiosAdapter.post({
+        const response = await axiosAdapter.post<OrderSaveDto>({
             url: "http://localhost:3000/api/orders/orders",
-            data: bodyMock
+            data: bodyMock as any
         });
-        expect(response.status).toBe(200);
-        expect(response.data).toEqual({});
+        expect(response.status).toBe(201);
+        expect(response.data).toHaveProperty("id");
+        expect(response.data).toHaveProperty("address");
+        expect(response.data.address.clientOrderId).toBe(response.data.id);
+        await axiosAdapter.delete({
+            url: "http://localhost:3000/api/orders-all",
+        });
+    })
+
+    test("Deve deletar um pedido /orders/:id", async () => {
+        const axiosAdapter = new AxiosAdapter();
+        const response = await axiosAdapter.post<OrderSaveDto>({
+            url: "http://localhost:3000/api/orders",
+            data: bodyMock as any
+        });
+        await axiosAdapter.delete({
+            url: `http://localhost:3000/api/orders/orders/${response.data.id}`,
+        });
+        const response2 = await axiosAdapter.get({
+            url: `http://localhost:3000/api/orders/orders/${response.data.id}`,
+        });
+        expect(response2.status).toBe(404);
     })
 })

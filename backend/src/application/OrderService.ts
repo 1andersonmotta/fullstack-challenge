@@ -36,7 +36,7 @@ export class OrderService {
         }
     }
 
-    async findById(id: string): Promise<ClientOrder | undefined> {
+    async findById(id: string): Promise<ClientOrder> {
         try {
             return await this.clientRepository.findById(id);
         } catch (error: any) {
@@ -48,7 +48,7 @@ export class OrderService {
         try {
             await this.clientRepository.delete(id);
         } catch (error) {
-            throw new Error("Erro ao deletar cliente");
+            throw error
         }
     }
 

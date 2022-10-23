@@ -1,8 +1,9 @@
 import { GeoLocation } from './../../application/GeoLocation';
 import { AbstractController, IRequest, IResponse } from '../../interfaces/AbstractController';
 import ServerHttp from '../../interfaces/ServerHttp';
-import { Controller, Get } from '../decorate/HttpDecorate';
+import { Controller, Delete, Get, Post } from '../decorate/HttpDecorate';
 import { OrderService } from '../../application/OrderService';
+import { OrderCreateDto } from '../../dto/OrderCreateDto';
 
 @Controller('/api/orders')
 export class OrderController extends AbstractController {
@@ -23,6 +24,19 @@ export class OrderController extends AbstractController {
     }
   }
 
+  @Get('/orders/:id')
+  private async getOrdersById(req: IRequest, res: IResponse) {
+    const { id } = req.params;
+    try {
+      const order = await this.orderService.findById(id);
+      console.log(order);
+
+      res.status(200).send(order);
+    } catch (error: any) {
+      res.status(error.code || 500).send(error.message || "Internal Server Error");
+    }
+  }
+
   @Get('/orders')
   private async getOrders(req: IRequest<any, any, OrdersQuery>, res: IResponse) {
     const { page, per_page } = req.query;
@@ -33,12 +47,39 @@ export class OrderController extends AbstractController {
     catch (error: any) {
       res.status(error.code || 500).send(error.message || "Internal Server Error");
     }
-
   }
+
+  @Post('/orders')
+  private async postOrders(req: IRequest<any, OrderCreateDto>, res: IResponse) {
+    try {
+      const order = await this.orderService.save(req.body);
+      console.log(order);
+
+      res.status(201).send(order);
+    }
+    catch (error: any) {
+      res.status(error.code || 500).send(error.message || "Internal Server Error");
+    }
+  }
+
+  @Delete('/orders-all')
+  private async deleteOrders(req: IRequest, res: IResponse) {
+    try {
+      await this.orderService.deleteAll();
+      res.status(200).send();
+    }
+    catch (error: any) {
+      res.status(error.code || 500).send(error.message || "Internal Server Error");
+    }
+  }
+
 
   public start() {
     this.getMe(this.req, this.res);
     this.getOrders(this.req, this.res);
+    this.postOrders(this.req, this.res);
+    this.deleteOrders(this.req, this.res);
+    this.getOrdersById(this.req, this.res);
   }
 }
 

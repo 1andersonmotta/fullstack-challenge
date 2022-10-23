@@ -1,10 +1,6 @@
-import axios from "axios";
 import { OrderService } from "../src/application/OrderService";
-import { GeoLocation } from "../src/application/GeoLocation";
 import { Address } from "../src/domain/Address";
 import { ClientOrder } from "../src/domain/ClientOrder";
-import Uuid from "../src/domain/helpers/Uuid";
-import { Location } from "../src/domain/Location";
 import { ClientMemoryRepository } from "../src/infra/repository/memory/ClientMemoryRepository";
 import { AddressMemoryRepository } from "../src/infra/repository/memory/AddressMemoryRepository";
 import { OrderCreateDto } from "../src/dto/OrderCreateDto";

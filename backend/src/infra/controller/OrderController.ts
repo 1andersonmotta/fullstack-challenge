@@ -5,7 +5,7 @@ import { Controller, Delete, Get, Post } from '../decorate/HttpDecorate';
 import { OrderService } from '../../application/OrderService';
 import { OrderCreateDto } from '../../dto/OrderCreateDto';
 
-@Controller('/api/orders')
+@Controller('/api/v1')
 export class OrderController extends AbstractController {
 
   constructor(readonly http: ServerHttp, readonly geolocation: GeoLocation, readonly orderService: OrderService) {
@@ -29,8 +29,6 @@ export class OrderController extends AbstractController {
     const { id } = req.params;
     try {
       const order = await this.orderService.findById(id);
-      console.log(order);
-
       res.status(200).send(order);
     } catch (error: any) {
       res.status(error.code || 500).send(error.message || "Internal Server Error");
@@ -53,8 +51,6 @@ export class OrderController extends AbstractController {
   private async postOrders(req: IRequest<any, OrderCreateDto>, res: IResponse) {
     try {
       const order = await this.orderService.save(req.body);
-      console.log(order);
-
       res.status(201).send(order);
     }
     catch (error: any) {

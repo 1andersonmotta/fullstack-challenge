@@ -30,7 +30,7 @@ describe("OrderController", () => {
     test.skip("Buscar um endereço válido /search-address", async () => {
         const axiosAdapter = new AxiosAdapter();
         const response = await axiosAdapter.get({
-            url: "http://localhost:3000/api/orders/search-address?address=Rua%20das%20Flores",
+            url: "http://localhost:3000/api/v1/search-address?address=Rua%20das%20Flores",
         });
         expect(response.status).toBe(200);
         expect(response.data).toEqual({ "latitude": "-25.4319606", "longitude": "-49.2736182" });
@@ -39,7 +39,7 @@ describe("OrderController", () => {
     test.skip("Buscar um endereço inválido /search-address", async () => {
         const axiosAdapter = new AxiosAdapter();
         const response = await axiosAdapter.get({
-            url: "http://localhost:3000/api/orders/search-address?address=xxxxxxxxxxx",
+            url: "http://localhost:3000/api/v1/search-address?address=xxxxxxxxxxx",
         });
         expect(response.status).toBe(400);
         expect(response.data).toBe("Não foi possível obter a localização");
@@ -48,7 +48,7 @@ describe("OrderController", () => {
     test("Deve listar os pedidos /orders", async () => {
         const axiosAdapter = new AxiosAdapter();
         const response = await axiosAdapter.get({
-            url: "http://localhost:3000/api/orders/orders?page=1&per_page=10",
+            url: "http://localhost:3000/api/v1/orders?page=1&per_page=10",
         });
         expect(response.status).toBe(200);
 
@@ -57,7 +57,7 @@ describe("OrderController", () => {
     test("Deve cadastrar um pedido /orders", async () => {
         const axiosAdapter = new AxiosAdapter();
         const response = await axiosAdapter.post<OrderSaveDto>({
-            url: "http://localhost:3000/api/orders/orders",
+            url: "http://localhost:3000/api/v1/orders",
             data: bodyMock as any
         });
         expect(response.status).toBe(201);
@@ -65,21 +65,21 @@ describe("OrderController", () => {
         expect(response.data).toHaveProperty("address");
         expect(response.data.address.clientOrderId).toBe(response.data.id);
         await axiosAdapter.delete({
-            url: "http://localhost:3000/api/orders-all",
+            url: "http://localhost:3000/api/v1/orders-all",
         });
     })
 
     test("Deve deletar um pedido /orders/:id", async () => {
         const axiosAdapter = new AxiosAdapter();
         const response = await axiosAdapter.post<OrderSaveDto>({
-            url: "http://localhost:3000/api/orders",
+            url: "http://localhost:3000/api/orders/v1",
             data: bodyMock as any
         });
         await axiosAdapter.delete({
-            url: `http://localhost:3000/api/orders/orders/${response.data.id}`,
+            url: `http://localhost:3000/api/v1/orders/${response.data.id}`,
         });
         const response2 = await axiosAdapter.get({
-            url: `http://localhost:3000/api/orders/orders/${response.data.id}`,
+            url: `http://localhost:3000/api/v1/orders/${response.data.id}`,
         });
         expect(response2.status).toBe(404);
     })

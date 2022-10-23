@@ -1,3 +1,4 @@
+import { Address } from "../../../domain/Address";
 import { ClientOrder } from "../../../domain/ClientOrder";
 import { ClientRepository } from "../../../interfaces/ClientRepository";
 import { TablePaginateResponse } from "../../../interfaces/TablePaginateResponse";

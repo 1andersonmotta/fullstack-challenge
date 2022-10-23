@@ -14,7 +14,7 @@ export default class ExpressAdapter implements ServerHttp {
     this.app.use(cors());
     this.app.use('/public', express.static('public'));
 
-    this.on("get", '/', (req, res) => {
+    this.on("get", '/api/', (req, res) => {
       res.status(200).send({
         message: 'Welcome to the API Fullstack Challenge',
         version: ConfigEnv.version,

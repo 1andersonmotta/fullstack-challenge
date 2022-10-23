@@ -1,14 +1,28 @@
+import { Address } from "../domain/Address";
 import { ClientOrder } from "../domain/ClientOrder";
+import { OrderCreateDto, OrderSaveDto } from "../dto/OrderCreateDto";
+import { AddressRepository } from "../interfaces/AddressRepository";
 import { ClientRepository } from "../interfaces/ClientRepository";
 import { TablePaginateResponse } from "../interfaces/TablePaginateResponse";
 
-export class ClientService {
+export class OrderService {
 
-    constructor(private clientRepository: ClientRepository) { }
+    constructor(private clientRepository: ClientRepository, readonly addressRepository: AddressRepository) { }
 
-    async save(client: ClientOrder): Promise<ClientOrder> {
+    async save(order: OrderCreateDto): Promise<OrderSaveDto> {
         try {
-            return await this.clientRepository.save(client);
+            const orderEntity = await this.clientRepository.save(new ClientOrder({
+                name: order.name,
+                productWeight: order.productWeight,
+            }));
+            const addressEntity = await this.addressRepository.save(new Address({
+                ...order.address,
+                clientOrderId: orderEntity.id
+            }));
+            return {
+                ...orderEntity,
+                address: addressEntity
+            }
         } catch (error) {
             throw new Error("Erro ao salvar cliente");
         }

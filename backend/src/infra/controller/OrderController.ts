@@ -4,6 +4,8 @@ import ServerHttp from '../../interfaces/ServerHttp';
 import { Controller, Delete, Get, Post } from '../decorate/HttpDecorate';
 import { OrderService } from '../../application/OrderService';
 import { OrderCreateDto } from '../../dto/OrderCreateDto';
+import { SwaggerDescription, SwaggerResponse, SwaggerParams, SwaggerBody } from '../decorate/SwaggetDecorate';
+import Uuid from '../../domain/helpers/Uuid';
 
 @Controller('/api/v1')
 export class OrderController extends AbstractController {
@@ -13,12 +15,29 @@ export class OrderController extends AbstractController {
     this.start();
   }
 
+  @SwaggerDescription('Search latitude and longitude by address')
+  @SwaggerParams({
+    name: 'address',
+    inType: 'query',
+  })
+  @SwaggerResponse({
+    status: 200,
+    description: 'Search latitude and longitude by address',
+    schema: {
+      latitude: "52.5166879",
+      longitude: "13.3860417",
+    }
+  })
+  @SwaggerResponse({
+    status: 404,
+    description: 'Order not found',
+  })
   @Get('/search-address')
-  private async getMe(req: IRequest<any, any, SearchAddressQuery>, res: IResponse) {
+  private async getMe(req: IRequest, res: IResponse) {
     const { address } = req.query;
     try {
-      const location = await this.geolocation.getGeoLocation(address);
-      res.status(200).send(location);
+      const { latitude, longitude } = await this.geolocation.getGeoLocation(address);
+      res.status(200).send({ latitude, longitude });
     } catch (error: any) {
       res.status(error.code || 500).send(error.message || "Internal Server Error");
     }
@@ -35,6 +54,43 @@ export class OrderController extends AbstractController {
     }
   }
 
+  @SwaggerDescription('Get all orders')
+  @SwaggerResponse({
+    status: 200,
+    description: 'Get all orders',
+    schema: {
+      page: 1,
+      per_page: 10,
+      total: 100,
+      total_pages: 10,
+      data: [
+        {
+          id: "f6f57414-29d6-4270-85fa-0a7150a92fcf",
+          name: "John Doe",
+          productWeight: 10,
+          address: {
+            id: Uuid.generate(),
+            clientOrderId: "f6f57414-29d6-4270-85fa-0a7150a92fcf",
+            street: "Under the Lindens",
+            city: "Berlin",
+            complement: "Apt 6",
+            country: "Alemanha",
+            neighborhood: "Mitte",
+            number: 1,
+            state: "BL",
+            zipCode: "18044",
+          }
+        }]
+    }
+  })
+  @SwaggerParams({
+    name: 'page',
+    inType: 'query',
+  })
+  @SwaggerParams({
+    name: 'per_page',
+    inType: 'query',
+  })
   @Get('/orders')
   private async getOrders(req: IRequest<any, any, OrdersQuery>, res: IResponse) {
     const { page, per_page } = req.query;
@@ -47,6 +103,43 @@ export class OrderController extends AbstractController {
     }
   }
 
+  @SwaggerDescription('Create order')
+  @SwaggerBody({
+    name: 'OrderCreateDto',
+    description: 'OrderCreateDto',
+    schema: {
+      name: "John Doe",
+      productWeight: 10,
+      address: {
+        street: "Under the Lindens",
+        city: "Berlin",
+        complement: "Apt 6",
+        country: "Alemanha",
+        neighborhood: "Mitte",
+        number: 1,
+        state: "BL",
+        zipCode: "18044",
+      }
+    }
+  })
+  @SwaggerResponse({
+    status: 201,
+    description: 'Order created',
+    schema: {
+      name: "John Doe",
+      productWeight: 10,
+      address: {
+        street: "Under the Lindens",
+        city: "Berlin",
+        complement: "Apt 6",
+        country: "Alemanha",
+        neighborhood: "Mitte",
+        number: 1,
+        state: "BL",
+        zipCode: "18044",
+      }
+    }
+  })
   @Post('/orders')
   private async postOrders(req: IRequest<any, OrderCreateDto>, res: IResponse) {
     try {
@@ -58,6 +151,7 @@ export class OrderController extends AbstractController {
     }
   }
 
+  @SwaggerDescription('Delete all orders')
   @Delete('/orders-all')
   private async deleteOrders(req: IRequest, res: IResponse) {
     try {

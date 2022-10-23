@@ -28,9 +28,21 @@ export class OrderService {
         }
     }
 
-    async findAll(page: number, per_page: number = 5): Promise<TablePaginateResponse<ClientOrder>> {
+    async findAll(page: number, per_page: number = 5): Promise<TablePaginateResponse<OrderSaveDto>> {
         try {
-            return await this.clientRepository.findAll(page, per_page);
+            const order = await this.clientRepository.findAll(page, per_page);
+            const orderSaveDto: OrderSaveDto[] = [];
+            for (const orderEntity of order.data) {
+                const addressEntity = await this.addressRepository.findByClientOrderId(orderEntity.id);
+                orderSaveDto.push({
+                    ...orderEntity,
+                    address: addressEntity
+                });
+            }
+            return {
+                ...order,
+                data: orderSaveDto
+            }
         } catch (error) {
             throw new Error("Erro ao buscar clientes");
         }

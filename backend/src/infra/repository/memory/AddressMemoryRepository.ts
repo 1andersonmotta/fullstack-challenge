@@ -9,6 +9,14 @@ export class AddressMemoryRepository implements AddressRepository {
         return address;
     }
 
+    async findByClientOrderId(clientOrderId: string): Promise<Address> {
+        const address = this.addresses.find(address => address.clientOrderId === clientOrderId);
+        if (!address) {
+            throw new Error("Endereço não encontrado");
+        }
+        return address;
+    }
+
     async findById(id: string): Promise<Address | undefined> {
         return this.addresses.find(address => address.id === id);
     }

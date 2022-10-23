@@ -21,7 +21,7 @@ export class ClientMemoryRepository implements ClientRepository {
         return Promise.resolve(clientEntity) as Promise<ClientOrder>;
     }
 
-    findAll(page: number, per_page: number = 5): Promise<TablePaginateResponse<ClientOrder>> {
+    findAll(page: number = 1, per_page: number = 5): Promise<TablePaginateResponse<ClientOrder>> {
         const total = this.clients.length;
         const total_pages = Math.ceil(total / per_page);
         const data = this.clients.slice((page - 1) * per_page, page * per_page);
@@ -35,6 +35,10 @@ export class ClientMemoryRepository implements ClientRepository {
     }
 
     async findById(id: string): Promise<ClientOrder> {
+        console.log(this.clients);
+        console.log({ id });
+
+
         const clientEntity = this.clients.find(client => client.id === id);
         if (!clientEntity) {
             throw NotFound("Cliente não encontrado");

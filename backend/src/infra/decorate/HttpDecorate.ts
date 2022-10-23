@@ -1,11 +1,10 @@
 import ServerHttp from "../../interfaces/ServerHttp";
-
-
-interface IController extends PropertyDescriptor {
+import { setAttributes } from "../../swagger";
+import { swaggerState } from "./SwaggetDecorate";
+export interface IController extends PropertyDescriptor {
 	baseUrl?: string;
 	http?: ServerHttp
 }
-
 
 function Controller(path: string = '') {
 	return function (target: any) {
@@ -18,7 +17,7 @@ function Get(path: string = '') {
 		const methodOriginal = descriptor.value;
 		descriptor.value = async function (...args: any[]) {
 			let result;
-			this.http?.on('get', this.baseUrl + path, async (req, res) => {
+			this.http?.on("get", this.baseUrl + path, propertyKey, async (req, res) => {
 				result = await methodOriginal.apply(this, [req, res]);
 			});
 			return result;
@@ -31,7 +30,7 @@ function Post(path: string = '') {
 		const methodOriginal = descriptor.value;
 		descriptor.value = async function (...args: any[]) {
 			let result;
-			this.http?.on('post', this.baseUrl + path, async (req, res) => {
+			this.http?.on('post', this.baseUrl + path, propertyKey, async (req, res) => {
 				result = await methodOriginal.apply(this, [req, res]);
 			});
 			return result;
@@ -44,7 +43,7 @@ function Put(path: string = '') {
 		const methodOriginal = descriptor.value;
 		descriptor.value = async function (...args: any[]) {
 			let result;
-			this.http?.on('put', this.baseUrl + path, async (req, res) => {
+			this.http?.on('put', this.baseUrl + path, propertyKey, async (req, res) => {
 				result = await methodOriginal.apply(this, [req, res]);
 			});
 			return result;
@@ -57,7 +56,7 @@ function Delete(path: string = '') {
 		const methodOriginal = descriptor.value;
 		descriptor.value = async function (...args: any[]) {
 			let result;
-			this.http?.on('delete', this.baseUrl + path, async (req, res) => {
+			this.http?.on('delete', this.baseUrl + path, propertyKey, async (req, res) => {
 				result = await methodOriginal.apply(this, [req, res]);
 			});
 			return result;
@@ -66,3 +65,4 @@ function Delete(path: string = '') {
 }
 
 export { Controller, Get, Post, Put, Delete };
+

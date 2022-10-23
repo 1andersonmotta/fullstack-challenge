@@ -58,8 +58,11 @@ describe("Client", () => {
         await clientService.save({ ...clientMock, id: Uuid.generate() });
         await clientService.save({ ...clientMock, id: Uuid.generate() });
         await clientService.save({ ...clientMock, id: Uuid.generate() });
-        expect(await clientService.findAll()).toHaveLength(3);
+        let client = await clientService.findAll(1);
+        expect(client.data).toHaveLength(3);
         await clientService.deleteAll();
-        expect(await clientService.findAll()).toHaveLength(0);
+        client = await clientService.findAll(1);
+        expect(client.page).toBe(1);
+        expect(client.data).toHaveLength(0);
     })
 })

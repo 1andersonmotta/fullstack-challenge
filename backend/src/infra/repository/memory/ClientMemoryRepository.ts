@@ -1,5 +1,6 @@
 import { ClientOrder } from "../../../domain/ClientOrder";
 import { ClientRepository } from "../../../interfaces/ClientRepository";
+import { TablePaginateResponse } from "../../../interfaces/TablePaginateResponse";
 
 export class ClientMemoryRepository implements ClientRepository {
     private clients: ClientOrder[] = [];
@@ -19,14 +20,24 @@ export class ClientMemoryRepository implements ClientRepository {
         return Promise.resolve(clientEntity) as Promise<ClientOrder>;
     }
 
+    findAll(page: number, per_page: number = 5): Promise<TablePaginateResponse<ClientOrder>> {
+        const total = this.clients.length;
+        const total_pages = Math.ceil(total / per_page);
+        const data = this.clients.slice((page - 1) * per_page, page * per_page);
+        return Promise.resolve({
+            page,
+            per_page,
+            total,
+            total_pages,
+            data
+        });
+    }
+
     async findById(id: string): Promise<ClientOrder | undefined> {
         const clientEntity = this.clients.find(client => client.id === id);
         return Promise.resolve(clientEntity);
     }
 
-    async findAll(): Promise<ClientOrder[]> {
-        return Promise.resolve(this.clients);
-    }
 
     async delete(id: string): Promise<void> {
         const index = this.clients.findIndex(client => client.id === id);

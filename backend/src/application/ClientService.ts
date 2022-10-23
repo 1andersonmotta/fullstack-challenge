@@ -1,5 +1,6 @@
 import { ClientOrder } from "../domain/ClientOrder";
 import { ClientRepository } from "../interfaces/ClientRepository";
+import { TablePaginateResponse } from "../interfaces/TablePaginateResponse";
 
 export class ClientService {
 
@@ -13,9 +14,9 @@ export class ClientService {
         }
     }
 
-    async findAll(): Promise<ClientOrder[]> {
+    async findAll(page: number, per_page: number = 5): Promise<TablePaginateResponse<ClientOrder>> {
         try {
-            return await this.clientRepository.findAll();
+            return await this.clientRepository.findAll(page, per_page);
         } catch (error) {
             throw new Error("Erro ao buscar clientes");
         }

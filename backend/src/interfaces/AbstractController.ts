@@ -6,3 +6,7 @@ export abstract class AbstractController {
     next?: () => void;
     protected abstract start(): void;
 }
+
+export interface IRequest extends Request { }
+
+export interface IResponse extends Response { }

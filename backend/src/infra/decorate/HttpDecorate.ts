@@ -1,14 +1,11 @@
-import Http from "../../interfaces/Http";
-import { Request, Response } from 'express';
+import ServerHttp from "../../interfaces/ServerHttp";
 
 
 interface IController extends PropertyDescriptor {
 	baseUrl?: string;
-	http?: Http
+	http?: ServerHttp
 }
 
-export interface IRequest extends Request { }
-export interface IResponse extends Response { }
 
 function Controller(path: string = '') {
 	return function (target: any) {

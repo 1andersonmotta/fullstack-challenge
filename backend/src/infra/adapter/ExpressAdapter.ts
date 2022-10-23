@@ -1,10 +1,10 @@
-import Http from '../../interfaces/Http';
+import ServerHttp from '../../interfaces/ServerHttp';
 import cors from 'cors';
 import express, { Request, Response, Express } from 'express';
 import { ConfigEnv } from '../config/configuration';
 import Logger from '../config/Logger';
 
-export default class ExpressAdapter implements Http {
+export default class ExpressAdapter implements ServerHttp {
   app!: Express;
 
   constructor() {
@@ -14,7 +14,7 @@ export default class ExpressAdapter implements Http {
     this.app.use(cors());
     this.app.use('/public', express.static('public'));
 
-    this.app.get('/', (req, res) => {
+    this.on("get", '/', (req, res) => {
       res.status(200).send({
         message: 'Welcome to the API Fullstack Challenge',
         version: ConfigEnv.version,
@@ -22,9 +22,9 @@ export default class ExpressAdapter implements Http {
     });
   }
 
-  on(method: string, url: string, middleware: Function, callback: (req: Request, res: Response) => void): void {
+  on(method: string, url: string, callback: (req: Request, res: Response) => void): void {
     Logger.info(`[ ${method.toUpperCase()} ] - ${url}`);
-    this.app[method as keyof Express](url, middleware, callback);
+    this.app[method as keyof Express](url, callback);
   }
 
   listen(port: number): void {

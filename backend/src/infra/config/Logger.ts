@@ -1,16 +1,20 @@
-import winston from 'winston';
+import pino from 'pino';
 
-const Logger = winston.createLogger({});
+const LoggerPino = pino({
+    level: 'debug',
+    transport: {
+        target: 'pino-pretty',
+        options: {
+            colorize: true,
+        },
+    },
+});
 
-if (process.env.NODE_ENV !== 'production' && process.env.NODE_ENV !== 'test') {
-    Logger.add(
-        new winston.transports.Console({
-            format: winston.format.combine(
-                winston.format.colorize(),
-                winston.format.simple()
-            ),
-        })
-    );
+const Logger = {
+    info: (message: any | any[]) => LoggerPino.info(message),
+    error: (message: any | any[]) => LoggerPino.error(message),
+    debug: (message: any | any[]) => LoggerPino.debug(message),
 }
+
 
 export default Logger;

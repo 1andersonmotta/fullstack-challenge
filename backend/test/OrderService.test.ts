@@ -1,34 +1,17 @@
+import { AxiosAdapter } from './../src/infra/adapter/AxiosAdapter';
 import { OrderService } from "../src/application/OrderService";
 import { Address } from "../src/domain/Address";
 import { ClientOrder } from "../src/domain/ClientOrder";
 import { ClientMemoryRepository } from "../src/infra/repository/memory/ClientMemoryRepository";
 import { AddressMemoryRepository } from "../src/infra/repository/memory/AddressMemoryRepository";
 import { OrderCreateDto } from "../src/dto/OrderCreateDto";
+import { GeoLocation } from "../src/application/GeoLocation";
 
 const orderMock: OrderCreateDto = {
     name: "John Doe",
     productWeight: 10,
-    address: {
-        street: "Under the Lindens",
-        city: "Berlin",
-        complement: "Apt 6",
-        country: "Alemanha",
-        neighborhood: "Mitte",
-        number: 1,
-        state: "SP",
-        zipCode: "18044-050",
-    }
+    searchAddress: "Under the Lindens, Berlin"
 }
-
-const clientOrderMock = new ClientOrder({
-    name: orderMock.name,
-    productWeight: orderMock.productWeight,
-})
-
-const addressMock = new Address({
-    ...orderMock.address,
-    clientOrderId: clientOrderMock.id
-})
 
 describe("Client", () => {
     test("Deve gerar um novo cliente", () => {
@@ -44,7 +27,7 @@ describe("Client", () => {
     })
 
     test("Deve salvar um novo cliente", async () => {
-        const clientService = new OrderService(new ClientMemoryRepository(), new AddressMemoryRepository());
+        const clientService = new OrderService(new ClientMemoryRepository(), new AddressMemoryRepository(), new GeoLocation(new AxiosAdapter()));
         const clientEntity = await clientService.save(orderMock);
         expect(clientEntity).toHaveProperty("id");
         expect(clientEntity).toHaveProperty("address");
@@ -53,7 +36,7 @@ describe("Client", () => {
     })
 
     test("Deve deletar um cliente", async () => {
-        const clientService = new OrderService(new ClientMemoryRepository(), new AddressMemoryRepository());
+        const clientService = new OrderService(new ClientMemoryRepository(), new AddressMemoryRepository(), new GeoLocation(new AxiosAdapter()));
         const clientEntity = await clientService.save(orderMock);
         await clientService.delete(clientEntity.id);
         try {
@@ -65,7 +48,7 @@ describe("Client", () => {
     })
 
     test("Deve deletar todos os clientes", async () => {
-        const clientService = new OrderService(new ClientMemoryRepository(), new AddressMemoryRepository());
+        const clientService = new OrderService(new ClientMemoryRepository(), new AddressMemoryRepository(), new GeoLocation(new AxiosAdapter()));
         await clientService.save(orderMock);
         await clientService.save(orderMock);
         await clientService.save(orderMock);

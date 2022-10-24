@@ -5,6 +5,8 @@
 	"main": "index.js",
 	"scripts": {
 		"start": "node dist/src/server.js",
+		"prebuild": "rm -rf dist",
+		"build": "tsc",
 		"dev": "ts-node-dev --respawn --inspect --transpile-only --exit-child src/server.ts",
 		"test": "jest",
 		"test:watch": "jest --watch",

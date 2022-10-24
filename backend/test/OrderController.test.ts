@@ -14,16 +14,7 @@ test("Verificar se api está de pé", async () => {
 const bodyMock: OrderCreateDto = {
     name: "John Doe",
     productWeight: 10,
-    address: {
-        street: "Under the Lindens",
-        city: "Berlin",
-        complement: "Apt 6",
-        country: "Alemanha",
-        neighborhood: "Mitte",
-        number: 1,
-        state: "",
-        zipCode: "1111",
-    }
+    searchAddress: "Under the Lindens, Berlin"
 }
 
 describe("OrderController", () => {

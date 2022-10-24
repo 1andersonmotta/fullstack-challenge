@@ -3,5 +3,7 @@ export type TablePaginateResponse<T> = {
     per_page: number;
     total: number;
     total_pages: number;
+    weigh_total: number;
+    averageTicket: number;
     data: T[];
 };

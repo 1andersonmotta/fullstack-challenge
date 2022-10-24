@@ -24,21 +24,20 @@ export class ClientMemoryRepository implements ClientRepository {
     findAll(page: number = 1, per_page: number = 5): Promise<TablePaginateResponse<ClientOrder>> {
         const total = this.clients.length;
         const total_pages = Math.ceil(total / per_page);
+        const weigh_total = this.clients.reduce((acc, client) => acc += client.productWeight, 0)
         const data = this.clients.slice((page - 1) * per_page, page * per_page);
         return Promise.resolve({
             page,
             per_page,
             total,
+            averageTicket: weigh_total / total,
+            weigh_total,
             total_pages,
             data
         });
     }
 
     async findById(id: string): Promise<ClientOrder> {
-        console.log(this.clients);
-        console.log({ id });
-
-
         const clientEntity = this.clients.find(client => client.id === id);
         if (!clientEntity) {
             throw NotFound("Cliente não encontrado");

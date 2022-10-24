@@ -12,7 +12,7 @@ const LoggerPino = pino({
 
 const Logger = {
     info: (message: any | any[]) => LoggerPino.info(message),
-    error: (message: any | any[]) => LoggerPino.error(message),
+    error: (message: any | any[]) => LoggerPino.error(JSON.stringify(message)),
     debug: (message: any | any[]) => LoggerPino.debug(message),
 }
 

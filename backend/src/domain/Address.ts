@@ -5,7 +5,7 @@ export class Address {
     id: string;
     clientOrderId: string;
     street: string;
-    number: number;
+    number: string;
     neighborhood: string;
     city: string;
     state: string;
@@ -50,7 +50,7 @@ export type InputAddress = {
     id?: string;
     clientOrderId: string;
     street: string;
-    number: number;
+    number: string;
     neighborhood: string;
     city: string;
     state: string;

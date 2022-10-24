@@ -1,12 +1,12 @@
-import { Address, InputAddress } from "../domain/Address";
+import { Address } from "../domain/Address";
 
 export type OrderCreateDto = {
     name: string;
     productWeight: number;
-    address: Omit<InputAddress, 'id' | 'clientOrderId'>;
+    searchAddress: string;
 }
 
-export interface OrderSaveDto extends OrderCreateDto {
+export interface OrderSaveDto extends Omit<OrderCreateDto, 'searchAddress'> {
     id: string;
     address: Address;
 }

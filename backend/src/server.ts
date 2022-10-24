@@ -14,7 +14,7 @@ const app = express()
 const expressAdapter = new ExpressAdapter(app);
 
 const geolocation = new GeoLocation(new AxiosAdapter());
-const orderService = new OrderService(new ClientMemoryRepository(), new AddressMemoryRepository());
+const orderService = new OrderService(new ClientMemoryRepository(), new AddressMemoryRepository(), new GeoLocation(new AxiosAdapter()));
 new OrderController(expressAdapter, geolocation, orderService);
 
 expressAdapter.listen(+PORT);

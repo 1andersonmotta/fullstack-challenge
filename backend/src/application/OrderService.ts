@@ -1,29 +1,52 @@
 import { Address } from "../domain/Address";
 import { ClientOrder } from "../domain/ClientOrder";
+import { Location } from "../domain/Location";
 import { OrderCreateDto, OrderSaveDto } from "../dto/OrderCreateDto";
 import { AddressRepository } from "../interfaces/AddressRepository";
 import { ClientRepository } from "../interfaces/ClientRepository";
 import { TablePaginateResponse } from "../interfaces/TablePaginateResponse";
+import { GeoLocation } from "./GeoLocation";
 
 export class OrderService {
 
-    constructor(private clientRepository: ClientRepository, readonly addressRepository: AddressRepository) { }
+    constructor(
+        private clientRepository: ClientRepository,
+        readonly addressRepository: AddressRepository,
+        readonly geolocation: GeoLocation
+    ) { }
 
     async save(order: OrderCreateDto): Promise<OrderSaveDto> {
         try {
+            const responseData = await this.geolocation.getGeoLocation(order.searchAddress);
+
             const orderEntity = await this.clientRepository.save(new ClientOrder({
                 name: order.name,
                 productWeight: order.productWeight,
             }));
+
             const addressEntity = await this.addressRepository.save(new Address({
-                ...order.address,
-                clientOrderId: orderEntity.id
+                clientOrderId: orderEntity.id,
+                city: responseData.address.city,
+                complement: "",
+                country: responseData.address.country,
+                neighborhood: responseData.address.suburb,
+                number: responseData.address.house_number,
+                state: responseData.address.state,
+                street: responseData.address.road,
+                zipCode: responseData.address.postcode,
+                location: new Location({
+                    latitude: responseData.lat,
+                    longitude: responseData.lon
+                })
             }));
+
             return {
                 ...orderEntity,
                 address: addressEntity
             }
         } catch (error) {
+            console.log(error);
+
             throw new Error("Erro ao salvar cliente");
         }
     }

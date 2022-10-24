@@ -16,9 +16,9 @@ export const BadRequest = (message: string): IError => {
 };
 
 export const NotFound = (message: string = "Usuário não encontrado"): IError => {
-  Logger?.error(JSON.stringify(message))
   const error = new Error(message);
   error.name = "NotFound";
+  Logger?.error(message)
   throw {
     message: error.message,
     name: error.name,

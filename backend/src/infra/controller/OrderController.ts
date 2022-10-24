@@ -6,6 +6,7 @@ import { OrderService } from '../../application/OrderService';
 import { OrderCreateDto } from '../../dto/OrderCreateDto';
 import { SwaggerDescription, SwaggerResponse, SwaggerParams, SwaggerBody } from '../decorate/SwaggetDecorate';
 import Uuid from '../../domain/helpers/Uuid';
+import { Location } from '../../domain/Location';
 
 @Controller('/api/v1')
 export class OrderController extends AbstractController {
@@ -36,8 +37,12 @@ export class OrderController extends AbstractController {
   private async getMe(req: IRequest, res: IResponse) {
     const { address } = req.query;
     try {
-      const { latitude, longitude } = await this.geolocation.getGeoLocation(address);
-      res.status(200).send({ latitude, longitude });
+
+      const data = await this.geolocation.getGeoLocation(address);
+      res.status(200).send(new Location({
+        latitude: data.lat,
+        longitude: data.lon,
+      }));
     } catch (error: any) {
       res.status(error.code || 500).send(error.message || "Internal Server Error");
     }
@@ -61,7 +66,9 @@ export class OrderController extends AbstractController {
     schema: {
       page: 1,
       per_page: 10,
-      total: 100,
+      total: 3,
+      averageTicket: 5333.333333333333,
+      weigh_total: 16000,
       total_pages: 10,
       data: [
         {
@@ -109,17 +116,8 @@ export class OrderController extends AbstractController {
     description: 'OrderCreateDto',
     schema: {
       name: "John Doe",
-      productWeight: 10,
-      address: {
-        street: "Under the Lindens",
-        city: "Berlin",
-        complement: "Apt 6",
-        country: "Alemanha",
-        neighborhood: "Mitte",
-        number: 1,
-        state: "BL",
-        zipCode: "18044",
-      }
+      productWeight: 1000,
+      searchAddress: "Under the Lindens, Berlin",
     }
   })
   @SwaggerResponse({
@@ -177,7 +175,3 @@ type OrdersQuery = {
   page: number,
   per_page: number,
 }
-
-type SearchAddressQuery = {
-  address: string;
-};

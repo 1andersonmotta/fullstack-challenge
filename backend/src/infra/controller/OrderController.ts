@@ -37,7 +37,6 @@ export class OrderController extends AbstractController {
   private async getMe(req: IRequest, res: IResponse) {
     const { address } = req.query;
     try {
-
       const data = await this.geolocation.getGeoLocation(address);
       res.status(200).send(new Location({
         latitude: data.lat,

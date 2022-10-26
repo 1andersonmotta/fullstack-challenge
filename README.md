@@ -1,10 +1,14 @@
 <h1 align="center"> Fullstack Challenge </h1>
 
+![Fullstack Project](fullstack-project.png)
+
 
 ## Tecnologias 🚀 
 Esse projeto foi desenvolvido com as seguintes tecnologias:
 - Node
 - Typescript
+- React 
+- TailwindCSS
 
 ### Objetivo
 - Arquitetura hexagonal
@@ -21,12 +25,18 @@ Esse projeto foi desenvolvido com as seguintes tecnologias:
 docker compose up
 ```
 
-#### Acessar a documentação
+#### Acessar a documentação api
 ```bash
-http://localhost:3000/doc
+http://localhost:5000/doc
 ```
 
-Feito com ♥ by [Wilson Felipe](https://github.com/Wfelipe2011)
+
+#### Acessar aplicação Web
+```bash
+http://localhost:3000
+```
+
+Feito por [Wilson Felipe](https://github.com/Wfelipe2011)
 
 
 

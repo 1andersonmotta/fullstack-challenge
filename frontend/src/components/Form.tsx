@@ -51,7 +51,7 @@ function Form(props: FormProps) {
   };
 
   return (
-    <div className="flex flex-col flex-1 p-4 ">
+    <div className="flex flex-col w-full md:w-2/3 p-4">
       <form
         onSubmit={saveClient}
         className="flex flex-col p-8 gap-4 w-full bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4 my-2"
@@ -98,7 +98,7 @@ function Form(props: FormProps) {
           type="text"
           required
           placeholder="Latitude"
-          value={props.position[0]}
+          value={props.addressSearch ? props.position[0]: ""}
           disabled
         />
         <input
@@ -106,7 +106,7 @@ function Form(props: FormProps) {
           type="text"
           required
           placeholder="Longitude"
-          value={props.position[1]}
+          value={props.addressSearch ? props.position[1] : ""}
           disabled
         />
         <button

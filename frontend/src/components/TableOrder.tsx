@@ -1,6 +1,6 @@
 // function TableOrder: table with fields name, road, city, state, country, weight, latitude, longitude
 
-import { Order, OrderDetails } from "./App";
+import { Order, OrderDetails } from "../App";
 
 interface TableOrderProps {
   orderDetails: OrderDetails;
@@ -10,7 +10,7 @@ interface TableOrderProps {
 
 function TableOrder(props: TableOrderProps) {
   return (
-    <div className="flex flex-col flex-1 p-4">
+    <div className="flex flex-col p-4">
       <div className="flex flex-row justify-between">
         <div className="flex gap-4">
           <span className="text-gray-700 font-bold">Total de clientes</span>
@@ -36,26 +36,30 @@ function TableOrder(props: TableOrderProps) {
         <tbody>
           <tr className="border-b">
             <th className="text-left p-3 px-5">Nome</th>
-            <th className="text-left p-3 px-5">Rua</th>
-            <th className="text-left p-3 px-5">Cidade</th>
-            <th className="text-left p-3 px-5">Estado</th>
-            <th className="text-left p-3 px-5">País</th>
+            <th className="text-left p-3 px-5 table-cell">Rua</th>
+            <th className="text-left p-3 px-5 hidden md:table-cell">Cidade</th>
+            <th className="text-left p-3 px-5 hidden md:table-cell">Estado</th>
+            <th className="text-left p-3 px-5 hidden md:table-cell">País</th>
             <th className="text-left p-3 px-5">Peso</th>
-            <th className="text-left p-3 px-5">Latitude</th>
-            <th className="text-left p-3 px-5">Longitude</th>
+            <th className="text-left p-3 px-5 hidden md:table-cell">Latitude</th>
+            <th className="text-left p-3 px-5 hidden md:table-cell">Longitude</th>
           </tr>
-          {props.orders.map((order) => (
+          {props.orders.map((order) => {
+            Number( order.address.location?.latitude).toFixed(4)
+            return (
+           
+            
             <tr className="border-b hover:bg-orange-100 bg-gray-100">
               <td className="p-3 px-5">{order.name}</td>
-              <td className="p-3 px-5">{order.address.street}</td>
-              <td className="p-3 px-5">{order.address.city}</td>
-              <td className="p-3 px-5">{order.address.state}</td>
-              <td className="p-3 px-5">{order.address.country}</td>
+              <td className="p-3 px-5 ">{order.address.street}</td>
+              <td className="p-3 px-5 hidden md:table-cell">{order.address.city}</td>
+              <td className="p-3 px-5 hidden md:table-cell">{order.address.state}</td>
+              <td className="p-3 px-5 hidden md:table-cell">{order.address.country}</td>
               <td className="p-3 px-5">{order.productWeight}</td>
-              <td className="p-3 px-5">{order.address.location.latitude}</td>
-              <td className="p-3 px-5">{order.address.location.longitude}</td>
+              <td className="p-3 px-5 hidden md:table-cell">{Number( order.address.location?.latitude).toFixed(4)}</td>
+              <td className="p-3 px-5 hidden md:table-cell">{Number(order.address.location?.longitude).toFixed(4)}</td>
             </tr>
-          ))}
+          )})}
         </tbody>
       </table>
 

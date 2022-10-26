@@ -1,6 +1,6 @@
 import { useRef } from "react";
 import { Marker, Popup } from "react-leaflet";
-import { Order } from "./App";
+import { Order } from "../App";
 
 interface DraggableMarkerProps {
   position: [number, number];

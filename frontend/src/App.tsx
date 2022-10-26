@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
-import DraggableMarker from "./DraggableMarker";
-import Form from "./Form";
-import Map from "./Map";
-import TableOrder from "./TableOrder";
+import DraggableMarker from "./components/DraggableMarker";
+import Form from "./components/Form";
+import Map from "./components/Map";
+import TableOrder from "./components/TableOrder";
 
 export interface OrderDetails {
   page: number;
@@ -80,7 +80,7 @@ function App() {
   };
 
   return (
-    <div className="flex ">
+    <div className="flex flex-wrap md:flex-nowrap">
       <Form
         position={position}
         setPosition={setPosition}
@@ -88,7 +88,7 @@ function App() {
         setAddressSearch={setAddressSearch}
         getOrders={getOrders}
       />
-      <div className="border-l-2 flex flex-1 flex-col h-screen">
+      <div className="border-l-2 flex w-full flex-col h-screen">
         <Map center={position} zoom={16}>
           {orders.length > 0 &&
           (

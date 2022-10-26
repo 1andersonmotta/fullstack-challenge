@@ -30,13 +30,3 @@ Feito com ♥ by [Wilson Felipe](https://github.com/Wfelipe2011)
 
 
 
-web:
-    build:
-      context: ./frontend
-      dockerfile: Dockerfile
-    ports:
-      - '3000:3000'
-    environment:
-      REACT_APP_API_URL: http://localhost:5000
-    volumes:
-      - ./frontend/src:/app/src

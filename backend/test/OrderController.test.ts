@@ -14,7 +14,8 @@ test("Verificar se api está de pé", async () => {
 const bodyMock: OrderCreateDto = {
     name: "John Doe",
     productWeight: 10,
-    searchAddress: "Under the Lindens, Berlin"
+    latitude: 10,
+    longitude: 10,
 }
 
 describe("OrderController", () => {

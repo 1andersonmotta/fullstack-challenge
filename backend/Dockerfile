@@ -11,4 +11,4 @@ COPY . .
 RUN npm run prebuild
 RUN npm run build
 
-CMD ["yarn", "start"]
+CMD ["yarn", "dev"]

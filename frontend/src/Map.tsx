@@ -10,7 +10,7 @@ interface MapProps {
 function Map (props: MapProps){
   
     return (
-      <div className="flex flex-1 p-8">
+      <div className="flex flex-1 p-8 w-full">
         <MapContainer center={props.center} zoom={props.zoom} scrollWheelZoom={true} style={{ width: "100%", height: "100%" }}>
           <TileLayer
             attribution={'&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'}

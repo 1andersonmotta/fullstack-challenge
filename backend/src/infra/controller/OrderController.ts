@@ -52,7 +52,7 @@ export class OrderController extends AbstractController {
     const { lat, lng } = req.query;
     try {
       const data = await this.geolocation.getAddressByLatLng(lat, lng);
-      res.status(200).send({ data });
+      res.status(200).send({ data: data.address?.road + " - " + data.address?.suburb || "" + " - " + data.address?.city || "" });
     } catch (error: any) {
       res.status(error.code || 500).send(error.message || "Internal Server Error");
     }
@@ -127,7 +127,8 @@ export class OrderController extends AbstractController {
     schema: {
       name: "John Doe",
       productWeight: 1000,
-      searchAddress: "Under the Lindens, Berlin",
+      latitude: "52.5166879",
+      longitude: "13.3860417",
     }
   })
   @SwaggerResponse({

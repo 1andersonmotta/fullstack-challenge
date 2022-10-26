@@ -17,7 +17,7 @@ export class OrderService {
 
     async save(order: OrderCreateDto): Promise<OrderSaveDto> {
         try {
-            const responseData = await this.geolocation.getGeoLocation(order.searchAddress);
+            const responseData = await this.geolocation.getAddressByLatLng(order.latitude, order.longitude);
 
             const orderEntity = await this.clientRepository.save(new ClientOrder({
                 name: order.name,
@@ -30,7 +30,7 @@ export class OrderService {
                 complement: "",
                 country: responseData.address.country,
                 neighborhood: responseData.address.suburb,
-                number: responseData.address.house_number,
+                number: responseData.address?.house_number || "",
                 state: responseData.address.state,
                 street: responseData.address.road,
                 zipCode: responseData.address.postcode,

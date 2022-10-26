@@ -3,10 +3,11 @@ import { Address } from "../domain/Address";
 export type OrderCreateDto = {
     name: string;
     productWeight: number;
-    searchAddress: string;
+    latitude: number;
+    longitude: number;
 }
 
-export interface OrderSaveDto extends Omit<OrderCreateDto, 'searchAddress'> {
+export interface OrderSaveDto extends Omit<OrderCreateDto, 'latitude' | 'longitude'> {
     id: string;
     address: Address;
 }

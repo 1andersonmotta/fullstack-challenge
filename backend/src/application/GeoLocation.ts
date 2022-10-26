@@ -24,7 +24,7 @@ export class GeoLocation {
         }
     }
 
-    async getAddressByLatLng(lat: number, lng: number): Promise<string> {
+    async getAddressByLatLng(lat: number, lng: number): Promise<NominatimResponse> {
         try {
             Logger.info(`Search address by latlng ${lat} ${lng}`)
             const response = await this.http.get<NominatimResponse>({
@@ -32,7 +32,7 @@ export class GeoLocation {
             });
             if (response.status !== 200) throw BadRequest("Não foi possível obter a localização");
             Logger.info(`Search success by latlng ${lat} ${lng}`)
-            return response.data.address?.road + " - " + response.data.address?.suburb || "" + " - " + response.data.address?.city || "";
+            return response.data;
         } catch (error) {
             Logger.error(error)
             throw error

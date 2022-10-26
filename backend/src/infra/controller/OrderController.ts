@@ -34,7 +34,7 @@ export class OrderController extends AbstractController {
     description: 'Order not found',
   })
   @Get('/search-address')
-  private async getMe(req: IRequest, res: IResponse) {
+  private async searchAddress(req: IRequest, res: IResponse) {
     const { address } = req.query;
     try {
       const data = await this.geolocation.getGeoLocation(address);
@@ -42,6 +42,17 @@ export class OrderController extends AbstractController {
         latitude: data.lat,
         longitude: data.lon,
       }));
+    } catch (error: any) {
+      res.status(error.code || 500).send(error.message || "Internal Server Error");
+    }
+  }
+
+  @Get('/search-latlng')
+  private async searchLatLng(req: IRequest, res: IResponse) {
+    const { lat, lng } = req.query;
+    try {
+      const data = await this.geolocation.getAddressByLatLng(lat, lng);
+      res.status(200).send({ data });
     } catch (error: any) {
       res.status(error.code || 500).send(error.message || "Internal Server Error");
     }
@@ -162,11 +173,12 @@ export class OrderController extends AbstractController {
 
 
   public start() {
-    this.getMe(this.req, this.res);
+    this.searchAddress(this.req, this.res);
     this.getOrders(this.req, this.res);
     this.postOrders(this.req, this.res);
     this.deleteOrders(this.req, this.res);
     this.getOrdersById(this.req, this.res);
+    this.searchLatLng(this.req, this.res);
   }
 }
 

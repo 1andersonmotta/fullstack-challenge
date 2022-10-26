@@ -15,18 +15,3 @@ services:
       SERVER_PORT: 3000
     volumes:
       - ./backend/src:/app/src
-  web:
-    build:
-      context: ./frontend
-      dockerfile: Dockerfile
-    ports:
-      - '3000:3000'
-    deploy:
-      resources:
-          limits:
-            cpus: "1"
-            memory: 2G
-    environment:
-      REACT_APP_API_URL: http://localhost:5000
-    volumes:
-      - ./frontend/src:/app/src

@@ -24,6 +24,21 @@ export class GeoLocation {
         }
     }
 
+    async getAddressByLatLng(lat: number, lng: number): Promise<string> {
+        try {
+            Logger.info(`Search address by latlng ${lat} ${lng}`)
+            const response = await this.http.get<NominatimResponse>({
+                url: `https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lng}&format=jsonv2`
+            });
+            if (response.status !== 200) throw BadRequest("Não foi possível obter a localização");
+            Logger.info(`Search success by latlng ${lat} ${lng}`)
+            return response.data.address?.road + " - " + response.data.address?.suburb || "" + " - " + response.data.address?.city || "";
+        } catch (error) {
+            Logger.error(error)
+            throw error
+        }
+    }
+
 }
 export interface NominatimResponse {
     place_id: number;
